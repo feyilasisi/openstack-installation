@@ -1,0 +1,13 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp3s0:   # your physical NIC
+      dhcp4: no
+  bridges:
+    br-ex:
+      interfaces: [enp3s0]
+      dhcp4: true    # let it get an IP from your LAN
+      parameters:
+        stp: false
+        forward-delay: 0
