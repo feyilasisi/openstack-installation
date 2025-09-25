@@ -8,8 +8,8 @@ network:
   bridges:
     br-ex:
       interfaces: [enp3s0]
-      addresses: [203.0.113.34/27]   # one of your usable public IPs
-      gateway4: 203.0.113.33
+      addresses: [203.0.113.34/27]   # one of our usable public IPs as provided by our ISP, check readme.md under subnets for clarity
+      gateway4: 203.0.113.33          # provided by our ISP
       nameservers:
         addresses: [8.8.8.8, 1.1.1.1]
       parameters:
