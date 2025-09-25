@@ -2,7 +2,7 @@
 
 ## Step 1: Create a Netplan Configuration File
 
-Create a file at:
+Create a file at the path below and copy and paste the content of from the file in this repository:
 
 ```
 /etc/netplan/01-netcfg.yml
