@@ -2,12 +2,16 @@ network:
   version: 2
   renderer: networkd
   ethernets:
-    enp3s0:   # your physical NIC
+    enp3s0:
       dhcp4: no
+      dhcp6: no
   bridges:
     br-ex:
       interfaces: [enp3s0]
-      dhcp4: true    # let it get an IP from your LAN
+      addresses: [203.0.113.34/27]   # one of your usable public IPs
+      gateway4: 203.0.113.33
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]
       parameters:
         stp: false
         forward-delay: 0
