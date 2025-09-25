@@ -38,7 +38,7 @@ neutron_external_interface: "br-ex"
 
 This ensures Neutron will attach floating IPs to the **`br-ex`** bridge.
 
-Edit:
+if the path below exists, Edit:
 
 ```
 /etc/neutron/plugins/ml2/openvswitch_agent.ini
