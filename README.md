@@ -1,34 +1,69 @@
-# openstack-installation
+# OpenStack Installation
 
-step 1: create a file in: /etc/netplan/01-netcfg.yml
+## Step 1: Create a Netplan Configuration File
 
-The file: 02-netcfg.yml is more exhaustive, it should be used after the minimalist 01 configuration works: 
+Create a file at:
 
-step 2: 
-apply with:
+```
+/etc/netplan/01-netcfg.yml
+```
+
+> Note: The file **`02-netcfg.yml`** should be ignored for now.
+
+---
+
+## Step 2: Apply the Configuration
+
+Run:
+
+```bash
 sudo netplan apply
+```
 
-Step 3: Tell Kolla-Ansible to use the bridge
+---
 
-Edit /etc/kolla/globals.yml and add:
+## Step 3: Tell Kolla-Ansible to Use the Bridge
 
+Edit:
+
+```
+/etc/kolla/globals.yml
+```
+
+Add the following line:
+
+```yaml
 neutron_external_interface: "br-ex"
+```
 
-This ensures Neutron will attach floating IPs to the br-ex bridge.
+This ensures Neutron will attach floating IPs to the **`br-ex`** bridge.
 
-Step 4: Create the external network in OpenStack
+---
+
+## Step 4: Create the External Network in OpenStack
 
 After deployment, define the provider external network:
 
-openstack network create --share --external \
-  --provider-physical-network external \
-  --provider-network-type flat ext_net
+```bash
+openstack network create --share --external   --provider-physical-network external   --provider-network-type flat ext_net
+```
 
-  Define a subnet that matches our LAN’s/purchased IP range (but avoids conflicts):
+### Define a Subnet That Matches the LAN/ISP Block
 
-openstack subnet create --network ext_net \
-  --allocation-pool start=203.0.113.2,end=203.0.113.6 \
-  --gateway 203.0.113.1 \
-  --subnet-range 203.0.113.0/29 ext_subnet
+Avoid overlapping with other networks:
 
-  We should now you can assign floating IPs (from the pool in the subnet above) to tenant VMs, and they’ll be reachable on your LAN.
+```bash
+openstack subnet create --network ext_net   --allocation-pool start=203.0.113.34,end=203.0.113.62   --gateway 203.0.113.33   --subnet-range 203.0.113.32/27 ext_subnet
+```
+
+At this point, we can assign floating IPs (from the pool defined above) to tenant VMs, and they should be reachable from the internet as long as the appropriate ports for connection are open.
+
+---
+
+## Example ISP-Provided Block
+
+Our ISP/datacenter provides a public subnet. We use this block to create the subnet for internet accessibility:
+
+- **Public Subnet:** `203.0.113.32/27`  
+- **Gateway:** `203.0.113.33`  
+- **Usable IPs:** `203.0.113.34 – 203.0.113.62`  
