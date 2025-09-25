@@ -1,0 +1,26 @@
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    eth0:
+      addresses: [10.10.0.10/24]
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]
+
+    eth1:
+      dhcp4: no
+
+    eth2:
+      dhcp4: true
+
+    enp3s0:     # the physical NIC (for external/public bridge)
+      dhcp4: no
+
+  bridges:
+    br-ex:
+      interfaces: [enp3s0]
+      dhcp4: true          # external/public bridge gets IP via LAN DHCP
+      parameters:
+        stp: false
+        forward-delay: 0
