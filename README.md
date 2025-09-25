@@ -38,6 +38,21 @@ neutron_external_interface: "br-ex"
 
 This ensures Neutron will attach floating IPs to the **`br-ex`** bridge.
 
+Edit:
+
+```
+/etc/neutron/plugins/ml2/openvswitch_agent.ini
+```
+or 
+```
+/etc/neutron/plugins/ml2/ml2_conf.ini
+```
+In the [ovs] section you add following line:
+
+```yaml
+[ovs]
+bridge_mappings = external:br-ex
+```
 ---
 
 ## Step 4: Create the External Network in OpenStack
@@ -66,4 +81,16 @@ Our ISP/datacenter provides a public subnet. We use this block to create the sub
 
 - **Public Subnet:** `203.0.113.32/27`  
 - **Gateway:** `203.0.113.33`  
-- **Usable IPs:** `203.0.113.34 – 203.0.113.62`  
+- **Usable IPs:** `203.0.113.34 – 203.0.113.62`
+
+### Restart neutron agents
+
+```bash
+sudo systemctl restart neutron-openvswitch-agent neutron-dhcp-agent neutron-l3-agent
+```
+
+### verify bridge mapping
+
+```bash
+sudo ovs-vsctl show
+```
