@@ -63,6 +63,14 @@ After deployment, define the provider external network:
 openstack network create --share --external   --provider-physical-network external   --provider-network-type flat ext_net
 ```
 
+## Example ISP-Provided Block
+
+Our ISP/datacenter provides a public subnet. We use this block to create the subnet for internet accessibility:
+
+- **Public Subnet:** `203.0.113.32/27`  
+- **Gateway:** `203.0.113.33`  
+- **Usable IPs:** `203.0.113.34 – 203.0.113.62`
+  
 ### Define a Subnet That Matches the LAN/ISP Block
 
 Avoid overlapping with other networks:
@@ -74,14 +82,6 @@ openstack subnet create --network ext_net   --allocation-pool start=203.0.113.34
 At this point, we can assign floating IPs (from the pool defined above) to tenant VMs, and they should be reachable from the internet as long as the appropriate ports for connection are open.
 
 ---
-
-## Example ISP-Provided Block
-
-Our ISP/datacenter provides a public subnet. We use this block to create the subnet for internet accessibility:
-
-- **Public Subnet:** `203.0.113.32/27`  
-- **Gateway:** `203.0.113.33`  
-- **Usable IPs:** `203.0.113.34 – 203.0.113.62`
 
 ### Restart neutron agents
 
